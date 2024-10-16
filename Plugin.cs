@@ -18,6 +18,7 @@ public sealed class Plugin : IDalamudPlugin
     [PluginService] internal static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
     [PluginService] internal static IContextMenu ContextMenu { get; private set; } = null!;
     [PluginService] internal static IDataManager DataManager { get; private set; } = null!;
+    [PluginService] internal static IChatGui Chat { get; private set; } = null!;
 
     public Configuration Configuration { get; init; }
 
@@ -42,7 +43,8 @@ public sealed class Plugin : IDalamudPlugin
 
     private unsafe async void ContextMenuOnOnMenuOpened(IMenuOpenedArgs args)
     {
-        if(!args.AddonName!.Equals("LookingForGroup") && !args.AddonName!.Equals("PartyMemberList")) return;
+        //Chat.Print(args.AddonName!);
+        if(!args.AddonName!.Equals("LookingForGroup") && !args.AddonName!.Equals("PartyMemberList")&& !args.AddonName!.Equals("_PartyList")) return;
         var ctx = AgentContext.Instance();
         
         var worldSheet = DataManager.GetExcelSheet<World>();
