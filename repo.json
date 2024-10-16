@@ -3,7 +3,7 @@
         "Author": "MilesNocte",
         "Name": "PFLogs",
         "InternalName": "PFLogs",
-        "AssemblyVersion": "0.0.0.1",
+        "AssemblyVersion": "0.0.0.2",
         "Description": "Adds open fflogs to party list and pf list context menu",
         "ApplicableVersion": "any",
         "Tags": [
@@ -18,9 +18,9 @@
         "CanUnloadAsync": false,
         "LoadPriority": 0,
         "Punchline": "Quickly check someones fflogs or tomestone",
-        "DownloadLinkInstall": "https://github.com/Milesnocte/PFLogs/releases/download/0.0.0.1/latest.zip",
-        "DownloadLinkTesting": "https://github.com/Milesnocte/PFLogs/releases/download/0.0.0.1/latest.zip",
-        "DownloadLinkUpdate": "https://github.com/Milesnocte/PFLogs/releases/download/0.0.0.1/latest.zip",
+        "DownloadLinkInstall": "https://github.com/Milesnocte/PFLogs/releases/download/0.0.0.2/latest.zip",
+        "DownloadLinkTesting": "https://github.com/Milesnocte/PFLogs/releases/download/0.0.0.2/latest.zip",
+        "DownloadLinkUpdate": "https://github.com/Milesnocte/PFLogs/releases/download/0.0.0.2/latest.zip",
         "AcceptsFeedback": true
     }
 ]

@@ -1,4 +1,5 @@
-﻿using Dalamud.IoC;
+﻿using System;
+using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.Linq;
 using Dalamud.Game.Gui.ContextMenu;
@@ -43,22 +44,31 @@ public sealed class Plugin : IDalamudPlugin
 
     private unsafe async void ContextMenuOnOnMenuOpened(IMenuOpenedArgs args)
     {
-        //Chat.Print(args.AddonName!);
-        if(!args.AddonName!.Equals("LookingForGroup") && !args.AddonName!.Equals("PartyMemberList")&& !args.AddonName!.Equals("_PartyList")) return;
-        var ctx = AgentContext.Instance();
-        
-        var worldSheet = DataManager.GetExcelSheet<World>();
-        
-        var name = ctx->ContextMenuTarget.NameString;
-        var world = worldSheet.GetRow(ctx->ContextMenuTarget.HomeWorld).Name;
-
-        args.AddMenuItem(new MenuItem()
+        try
         {
-            Name = Configuration.UseTomeStone ? "Open Tomestone" : "Open FFLogs",
-            PrefixChar = 'P',
-            PrefixColor = 707,
-            OnClicked = clickedArgs => GoToSite(name, world)
-        });
+            var ctx = AgentContext.Instance();
+            
+            //Chat.Print(args.AddonName!);
+            if (!args.AddonName!.Equals("LookingForGroup") && !args.AddonName!.Equals("PartyMemberList") &&
+                !args.AddonName!.Equals("_PartyList")) return;
+
+            var worldSheet = DataManager.GetExcelSheet<World>();
+
+            var name = ctx->ContextMenuTarget.NameString;
+            var world = worldSheet.GetRow(ctx->ContextMenuTarget.HomeWorld).Name;
+
+            args.AddMenuItem(new MenuItem()
+            {
+                Name = Configuration.UseTomeStone ? "Open Tomestone" : "Open FFLogs",
+                PrefixChar = 'P',
+                PrefixColor = 707,
+                OnClicked = clickedArgs => GoToSite(name, world)
+            });
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
     }
 
     private async void GoToSite(string name, string world)
