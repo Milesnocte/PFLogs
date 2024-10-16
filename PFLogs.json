@@ -1,12 +1,21 @@
 {
-  "Author": "Miles",
-  "Name": "PFLogs",
-  "Punchline": "Quickly check someones fflogs or tomestone",
-  "Description": "Adds open fflogs to party list and pf list context menu",
-  "ApplicableVersion": "any",
-  "Tags": [
-    "FFLogs",
-    "Tomestone",
-    "Party Finder"
-  ]
+    "Author": "Miles",
+    "Name": "PFLogs",
+    "InternalName": "PFLogs",
+    "AssemblyVersion": "0.0.1",
+    "RepoUrl": "https://github.com/Milesnocte/PFLogs",
+    "Description": "Adds open fflogs to party list and pf list context menu",
+    "ApplicableVersion": "any",
+    "Tags": [
+        "FFLogs",
+        "Tomestone",
+        "Party Finder"
+    ],
+    "DalamudApiLevel": 10,
+    "LoadRequiredState": 0,
+    "LoadSync": false,
+    "CanUnloadAsync": false,
+    "LoadPriority": 0,
+    "Punchline": "Quickly check someones fflogs or tomestone",
+    "AcceptsFeedback": true
 }
