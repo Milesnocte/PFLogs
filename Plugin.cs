@@ -16,10 +16,7 @@ namespace PFLogs;
 public sealed class Plugin : IDalamudPlugin
 {
     [PluginService] internal static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
-    
     [PluginService] internal static IContextMenu ContextMenu { get; private set; } = null!;
-    [PluginService] internal static IChatGui ChatGui { get; private set; } = null!;
-    
     [PluginService] internal static IDataManager DataManager { get; private set; } = null!;
 
     public Configuration Configuration { get; init; }
@@ -70,10 +67,7 @@ public sealed class Plugin : IDalamudPlugin
             CharacterName = name,
             World = world
         });
-        ChatGui.Print(name);
-        ChatGui.Print(world);
         var lodeId = characters!.Results.First(x => x.Name == name).Id;
-        ChatGui.Print(lodeId);
         if (Configuration.UseTomeStone)
         {
             Util.OpenLink($"https://tomestone.gg/character/{lodeId}/{name.Replace(" ", "-")}");
