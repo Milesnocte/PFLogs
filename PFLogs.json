@@ -1,0 +1,12 @@
+{
+  "Author": "Miles",
+  "Name": "PFLogs",
+  "Punchline": "Quickly check someones fflogs or tomestone",
+  "Description": "Adds open fflogs to party list and pf list context menu",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "FFLogs",
+    "Tomestone",
+    "Party Finder"
+  ]
+}
