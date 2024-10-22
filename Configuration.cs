@@ -9,7 +9,8 @@ public class Configuration : IPluginConfiguration
 {
     public int Version { get; set; } = 0;
 
-    public bool UseTomeStone { get; set; } = false;
+    public bool AddTomeStone { get; set; } = false;
+    public bool AddFFLogs { get; set; } = false;
     
     public void Save()
     {

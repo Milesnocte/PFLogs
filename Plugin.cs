@@ -20,6 +20,7 @@ public sealed class Plugin : IDalamudPlugin
     [PluginService] internal static IContextMenu ContextMenu { get; private set; } = null!;
     [PluginService] internal static IDataManager DataManager { get; private set; } = null!;
     [PluginService] internal static IChatGui Chat { get; private set; } = null!;
+    [PluginService] internal static IToastGui Toast { get; private set; } = null!;
 
     public Configuration Configuration { get; init; }
 
@@ -57,13 +58,27 @@ public sealed class Plugin : IDalamudPlugin
             var name = ctx->ContextMenuTarget.NameString;
             var world = worldSheet.GetRow(ctx->ContextMenuTarget.HomeWorld).Name;
 
-            args.AddMenuItem(new MenuItem()
+            if (Configuration.AddTomeStone)
             {
-                Name = Configuration.UseTomeStone ? "Open Tomestone" : "Open FFLogs",
-                PrefixChar = 'P',
-                PrefixColor = 707,
-                OnClicked = clickedArgs => GoToSite(name, world)
-            });
+                args.AddMenuItem(new MenuItem()
+                {
+                    Name = "Open Tomestone",
+                    PrefixChar = 'P',
+                    PrefixColor = 707,
+                    OnClicked = clickedArgs => OpenTomestone(name, world)
+                });
+            }
+            
+            if (Configuration.AddFFLogs)
+            {
+                args.AddMenuItem(new MenuItem()
+                {
+                    Name = "Open FFLogs",
+                    PrefixChar = 'P',
+                    PrefixColor = 707,
+                    OnClicked = clickedArgs => OpenFFLogs(name, world)
+                });
+            }
         }
         catch (Exception e)
         {
@@ -71,7 +86,7 @@ public sealed class Plugin : IDalamudPlugin
         }
     }
 
-    private async void GoToSite(string name, string world)
+    private async void OpenTomestone(string name, string world)
     {
         LodestoneClient lodestoneClient = await LodestoneClient.GetClientAsync();
         var characters = await lodestoneClient.SearchCharacter(new CharacterSearchQuery()
@@ -79,15 +94,34 @@ public sealed class Plugin : IDalamudPlugin
             CharacterName = name,
             World = world
         });
-        var lodeId = characters!.Results.First(x => x.Name == name).Id;
-        if (Configuration.UseTomeStone)
+        var lodeId = characters?.Results?.FirstOrDefault(x => x.Name == name)?.Id;
+
+        if (lodeId.IsNullOrEmpty())
         {
-            Util.OpenLink($"https://tomestone.gg/character/{lodeId}/{name.Replace(" ", "-")}");
+            Chat.Print("Error fetching Lodestone Id");
+            return;
         }
-        else
+        
+        Util.OpenLink($"https://tomestone.gg/character/{lodeId}/{name.Replace(" ", "-")}");
+    }
+    
+    private async void OpenFFLogs(string name, string world)
+    {
+        LodestoneClient lodestoneClient = await LodestoneClient.GetClientAsync();
+        var characters = await lodestoneClient.SearchCharacter(new CharacterSearchQuery()
         {
-            Util.OpenLink($"https://www.fflogs.com/character/lodestone-id/{lodeId}");
+            CharacterName = name,
+            World = world
+        });
+        var lodeId = characters?.Results?.FirstOrDefault(x => x.Name == name)?.Id;
+        
+        if (lodeId.IsNullOrEmpty())
+        {
+            Chat.Print("Error fetching Lodestone Id");
+            return;
         }
+       
+        Util.OpenLink($"https://www.fflogs.com/character/lodestone-id/{lodeId}");
     }
 
     public void Dispose()

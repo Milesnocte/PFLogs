@@ -28,7 +28,7 @@ public class ConfigWindow : Window, IDisposable
     public override void PreDraw()
     {
         // Flags must be added or removed before Draw() is being called, or they won't apply
-        if (Configuration.UseTomeStone)
+        if (Configuration.AddTomeStone)
         {
             Flags &= ~ImGuiWindowFlags.NoMove;
         }
@@ -41,10 +41,18 @@ public class ConfigWindow : Window, IDisposable
     public override void Draw()
     {
         // can't ref a property, so use a local copy
-        var configValue = Configuration.UseTomeStone;
-        if (ImGui.Checkbox("Open Tomestone instead of fflogs", ref configValue))
+        var tomestone = Configuration.AddTomeStone;
+        var fflogs = Configuration.AddFFLogs;
+        if (ImGui.Checkbox("Add FFLogs Option", ref fflogs))
         {
-            Configuration.UseTomeStone = configValue;
+            Configuration.AddFFLogs = fflogs;
+            // can save immediately on change, if you don't want to provide a "Save and Close" button
+            Configuration.Save();
+        }
+        
+        if (ImGui.Checkbox("Add Tomestone Option", ref tomestone))
+        {
+            Configuration.AddTomeStone = tomestone;
             // can save immediately on change, if you don't want to provide a "Save and Close" button
             Configuration.Save();
         }
