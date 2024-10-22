@@ -2,7 +2,7 @@
     "Author": "Miles",
     "Name": "PFLogs",
     "InternalName": "PFLogs",
-    "AssemblyVersion": "0.0.0.2",
+    "AssemblyVersion": "0.0.0.3",
     "RepoUrl": "https://github.com/Milesnocte/PFLogs",
     "Description": "Adds open fflogs to party list and pf list context menu",
     "ApplicableVersion": "any",
