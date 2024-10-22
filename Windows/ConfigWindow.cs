@@ -17,7 +17,7 @@ public class ConfigWindow : Window, IDisposable
         Flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
                 ImGuiWindowFlags.NoScrollWithMouse;
 
-        Size = new Vector2(350, 90);
+        Size = new Vector2(350, 200);
         SizeCondition = ImGuiCond.Always;
 
         Configuration = plugin.Configuration;
@@ -43,17 +43,40 @@ public class ConfigWindow : Window, IDisposable
         // can't ref a property, so use a local copy
         var tomestone = Configuration.AddTomeStone;
         var fflogs = Configuration.AddFFLogs;
+        
+        var partylist = Configuration.AddToPartyList;
+        var partyfinder = Configuration.AddToPartyFinder;
+        var partymembers = Configuration.AddToPartyMembers;
+        
         if (ImGui.Checkbox("Add FFLogs Option", ref fflogs))
         {
             Configuration.AddFFLogs = fflogs;
-            // can save immediately on change, if you don't want to provide a "Save and Close" button
             Configuration.Save();
         }
         
         if (ImGui.Checkbox("Add Tomestone Option", ref tomestone))
         {
             Configuration.AddTomeStone = tomestone;
-            // can save immediately on change, if you don't want to provide a "Save and Close" button
+            Configuration.Save();
+        }
+        
+        ImGui.Separator();
+        
+        if (ImGui.Checkbox("Add to Party Finder", ref partyfinder))
+        {
+            Configuration.AddToPartyFinder = partyfinder;
+            Configuration.Save();
+        }
+        
+        if (ImGui.Checkbox("Add to Party List (HUD)", ref partylist))
+        {
+            Configuration.AddToPartyList = partylist;
+            Configuration.Save();
+        }
+        
+        if (ImGui.Checkbox("Add to Party Member List (Social Window)", ref partymembers))
+        {
+            Configuration.AddToPartyMembers = partymembers;
             Configuration.Save();
         }
     }

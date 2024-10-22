@@ -50,8 +50,13 @@ public sealed class Plugin : IDalamudPlugin
             var ctx = AgentContext.Instance();
             
             //Chat.Print(args.AddonName!);
-            if (!args.AddonName!.Equals("LookingForGroup") && !args.AddonName!.Equals("PartyMemberList") &&
-                !args.AddonName!.Equals("_PartyList")) return;
+            if(!args.AddonName!.Equals("LookingForGroup") && 
+               !args.AddonName!.Equals("PartyMemberList") && 
+               !args.AddonName!.Equals("_PartyList")) return;
+            
+            if (args.AddonName!.Equals("LookingForGroup") && !Configuration.AddToPartyFinder) return;
+            if (args.AddonName!.Equals("PartyMemberList") && !Configuration.AddToPartyMembers) return;
+            if (args.AddonName!.Equals("_PartyList") && !Configuration.AddToPartyList) return;
 
             var worldSheet = DataManager.GetExcelSheet<World>();
 
