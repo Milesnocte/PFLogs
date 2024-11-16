@@ -44,9 +44,10 @@ public class ConfigWindow : Window, IDisposable
         var tomestone = Configuration.AddTomeStone;
         var fflogs = Configuration.AddFFLogs;
         
-        var partylist = Configuration.AddToPartyList;
-        var partyfinder = Configuration.AddToPartyFinder;
-        var partymembers = Configuration.AddToPartyMembers;
+        var partyList = Configuration.AddToPartyList;
+        var partyFinder = Configuration.AddToPartyFinder;
+        var partyMembers = Configuration.AddToPartyMembers;
+        var chatLog = Configuration.AddToChatLog;
         
         if (ImGui.Checkbox("Add FFLogs Option", ref fflogs))
         {
@@ -62,21 +63,27 @@ public class ConfigWindow : Window, IDisposable
         
         ImGui.Separator();
         
-        if (ImGui.Checkbox("Add to Party Finder", ref partyfinder))
+        if (ImGui.Checkbox("Add to Party Finder", ref partyFinder))
         {
-            Configuration.AddToPartyFinder = partyfinder;
+            Configuration.AddToPartyFinder = partyFinder;
             Configuration.Save();
         }
         
-        if (ImGui.Checkbox("Add to Party List (HUD)", ref partylist))
+        if (ImGui.Checkbox("Add to Party List (HUD)", ref partyList))
         {
-            Configuration.AddToPartyList = partylist;
+            Configuration.AddToPartyList = partyList;
             Configuration.Save();
         }
         
-        if (ImGui.Checkbox("Add to Party Member List (Social Window)", ref partymembers))
+        if (ImGui.Checkbox("Add to Party Member List (Social Window)", ref partyMembers))
         {
-            Configuration.AddToPartyMembers = partymembers;
+            Configuration.AddToPartyMembers = partyMembers;
+            Configuration.Save();
+        }
+        
+        if (ImGui.Checkbox("Add to Chat Window", ref chatLog))
+        {
+            Configuration.AddToChatLog = chatLog;
             Configuration.Save();
         }
     }

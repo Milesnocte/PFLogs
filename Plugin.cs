@@ -7,7 +7,7 @@ using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using NetStone;
 using NetStone.Search.Character;
 using PFLogs.Windows;
@@ -50,18 +50,39 @@ public sealed class Plugin : IDalamudPlugin
             var ctx = AgentContext.Instance();
             
             //Chat.Print(args.AddonName!);
-            if(!args.AddonName!.Equals("LookingForGroup") && 
-               !args.AddonName!.Equals("PartyMemberList") && 
-               !args.AddonName!.Equals("_PartyList")) return;
+            switch (args.AddonName)
+            {
+                case "LookingForGroup":
+                case "PartyMemberList":
+                case "ChatLog":
+                case "_PartyList":
+                    break;
+                default: return;
+            }
             
-            if (args.AddonName!.Equals("LookingForGroup") && !Configuration.AddToPartyFinder) return;
-            if (args.AddonName!.Equals("PartyMemberList") && !Configuration.AddToPartyMembers) return;
-            if (args.AddonName!.Equals("_PartyList") && !Configuration.AddToPartyList) return;
+            switch (args.AddonName!)
+            {
+                case "LookingForGroup" when !Configuration.AddToPartyFinder:
+                case "PartyMemberList" when !Configuration.AddToPartyMembers:
+                case "_PartyList" when !Configuration.AddToPartyList:
+                case "ChatLog" when !Configuration.AddToChatLog:
+                    return;
+            }
 
             var worldSheet = DataManager.GetExcelSheet<World>();
-
-            var name = ctx->ContextMenuTarget.NameString;
-            var world = worldSheet.GetRow(ctx->ContextMenuTarget.HomeWorld).Name;
+            string name;
+            string world;
+                
+            if (args.AddonName!.Equals("ChatLog"))
+            {
+                name = ctx->TargetName.ToString()!;
+                world = worldSheet.GetRow((uint)ctx->TargetHomeWorldId!).Name.ToString();
+            }
+            else
+            {
+                name = ctx->ContextMenuTarget.NameString;
+                world = worldSheet.GetRow(ctx->ContextMenuTarget.HomeWorld).Name.ToString();
+            }
 
             if (Configuration.AddTomeStone)
             {
@@ -93,40 +114,54 @@ public sealed class Plugin : IDalamudPlugin
 
     private async void OpenTomestone(string name, string world)
     {
-        LodestoneClient lodestoneClient = await LodestoneClient.GetClientAsync();
-        var characters = await lodestoneClient.SearchCharacter(new CharacterSearchQuery()
+        try
         {
-            CharacterName = name,
-            World = world
-        });
-        var lodeId = characters?.Results?.FirstOrDefault(x => x.Name == name)?.Id;
+            LodestoneClient lodestoneClient = await LodestoneClient.GetClientAsync();
+            var characters = await lodestoneClient.SearchCharacter(new CharacterSearchQuery()
+            {
+                CharacterName = name,
+                World = world
+            });
+            var lodeId = characters?.Results?.FirstOrDefault(x => x.Name == name)?.Id;
 
-        if (lodeId.IsNullOrEmpty())
-        {
-            Chat.Print("Error fetching Lodestone Id");
-            return;
+            if (lodeId.IsNullOrEmpty())
+            {
+                Chat.Print("Error fetching Lodestone Id");
+                return;
+            }
+
+            Util.OpenLink($"https://tomestone.gg/character/{lodeId}/{name.Replace(" ", "-")}");
         }
-        
-        Util.OpenLink($"https://tomestone.gg/character/{lodeId}/{name.Replace(" ", "-")}");
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
     
     private async void OpenFFLogs(string name, string world)
     {
-        LodestoneClient lodestoneClient = await LodestoneClient.GetClientAsync();
-        var characters = await lodestoneClient.SearchCharacter(new CharacterSearchQuery()
+        try
         {
-            CharacterName = name,
-            World = world
-        });
-        var lodeId = characters?.Results?.FirstOrDefault(x => x.Name == name)?.Id;
-        
-        if (lodeId.IsNullOrEmpty())
-        {
-            Chat.Print("Error fetching Lodestone Id");
-            return;
+            LodestoneClient lodestoneClient = await LodestoneClient.GetClientAsync();
+            var characters = await lodestoneClient.SearchCharacter(new CharacterSearchQuery()
+            {
+                CharacterName = name,
+                World = world
+            });
+            var lodeId = characters?.Results?.FirstOrDefault(x => x.Name == name)?.Id;
+
+            if (lodeId.IsNullOrEmpty())
+            {
+                Chat.Print("Error fetching Lodestone Id");
+                return;
+            }
+
+            Util.OpenLink($"https://www.fflogs.com/character/lodestone-id/{lodeId}");
         }
-       
-        Util.OpenLink($"https://www.fflogs.com/character/lodestone-id/{lodeId}");
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 
     public void Dispose()
