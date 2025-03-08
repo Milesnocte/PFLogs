@@ -50,12 +50,15 @@ public sealed class Plugin : IDalamudPlugin
             var ctx = AgentContext.Instance();
             
             //Chat.Print(args.AddonName!);
+            
             switch (args.AddonName)
             {
                 case "LookingForGroup":
                 case "PartyMemberList":
                 case "ChatLog":
                 case "_PartyList":
+                case "ContactList":
+                case "FriendList":
                     break;
                 default: return;
             }
@@ -64,16 +67,17 @@ public sealed class Plugin : IDalamudPlugin
             {
                 case "LookingForGroup" when !Configuration.AddToPartyFinder:
                 case "PartyMemberList" when !Configuration.AddToPartyMembers:
+                case "FriendList" when !Configuration.AddToFriendsList:
                 case "_PartyList" when !Configuration.AddToPartyList:
                 case "ChatLog" when !Configuration.AddToChatLog:
                     return;
             }
-
+            
             var worldSheet = DataManager.GetExcelSheet<World>();
             string name;
             string world;
                 
-            if (args.AddonName!.Equals("ChatLog"))
+            if (args.AddonName!.Equals("ChatLog") || args.AddonName!.Equals("ContactList"))
             {
                 name = ctx->TargetName.ToString()!;
                 world = worldSheet.GetRow((uint)ctx->TargetHomeWorldId!).Name.ToString();
@@ -83,6 +87,8 @@ public sealed class Plugin : IDalamudPlugin
                 name = ctx->ContextMenuTarget.NameString;
                 world = worldSheet.GetRow(ctx->ContextMenuTarget.HomeWorld).Name.ToString();
             }
+            
+            //Chat.Print($"{name}: {world}");
 
             if (Configuration.AddTomeStone)
             {

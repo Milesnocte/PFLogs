@@ -16,6 +16,8 @@ public class Configuration : IPluginConfiguration
     public bool AddToPartyMembers { get; set; } = true;
     public bool AddToPartyFinder { get; set; } = true;
     public bool AddToChatLog { get; set; } = false;
+    public bool AddToContactList { get; set; } = false;
+    public bool AddToFriendsList { get; set; } = false;
     
     public void Save()
     {

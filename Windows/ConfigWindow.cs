@@ -14,10 +14,10 @@ public class ConfigWindow : Window, IDisposable
     // and the window ID will always be "###XYZ counter window" for ImGui
     public ConfigWindow(Plugin plugin) : base("PFLogs Config")
     {
-        Flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
+        Flags = ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
                 ImGuiWindowFlags.NoScrollWithMouse;
 
-        Size = new Vector2(350, 200);
+        Size = new Vector2(400, 300);
         SizeCondition = ImGuiCond.Always;
 
         Configuration = plugin.Configuration;
@@ -47,6 +47,8 @@ public class ConfigWindow : Window, IDisposable
         var partyList = Configuration.AddToPartyList;
         var partyFinder = Configuration.AddToPartyFinder;
         var partyMembers = Configuration.AddToPartyMembers;
+        var contacts = Configuration.AddToContactList;
+        var friends = Configuration.AddToFriendsList;
         var chatLog = Configuration.AddToChatLog;
         
         if (ImGui.Checkbox("Add FFLogs Option", ref fflogs))
@@ -84,6 +86,18 @@ public class ConfigWindow : Window, IDisposable
         if (ImGui.Checkbox("Add to Chat Window", ref chatLog))
         {
             Configuration.AddToChatLog = chatLog;
+            Configuration.Save();
+        }
+        
+        if (ImGui.Checkbox("Add to Contacts", ref contacts))
+        {
+            Configuration.AddToContactList = contacts;
+            Configuration.Save();
+        }
+        
+        if (ImGui.Checkbox("Add to Friends", ref friends))
+        {
+            Configuration.AddToFriendsList = friends;
             Configuration.Save();
         }
     }
